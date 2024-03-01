@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,13 +13,13 @@ export default function Login() {
                 </CardHeader>
                 <CardContent >
                     <Label>Email</Label>
-                    <Input className="mb-4"></Input>
+                    <Input type="email" className="mb-4"></Input>
                     <Label>Password</Label>
-                    <Input></Input>
+                    <Input type="password"></Input>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4">
                     <Button className="w-full">Login</Button>
-                    <p className="font-light">Registrate: <a href="#">Sign up</a></p>
+                    <p className="font-light">Registrate <Link to='/register' className="text-blue-700 font-medium">Sign up</Link></p>
                 </CardFooter>
             </Card>
         </div>

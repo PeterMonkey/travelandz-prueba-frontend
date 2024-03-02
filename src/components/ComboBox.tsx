@@ -50,7 +50,7 @@ export default function ComboBox({data, text, empty}: Props) {
             <Command>
               <CommandInput placeholder={text} className="h-9" />
               <CommandEmpty>{empty}</CommandEmpty>
-              <CommandGroup>
+              <CommandGroup className="h-72">
                 {data.map((element) => (
                   <CommandItem
                     key={element.value}

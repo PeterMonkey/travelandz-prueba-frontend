@@ -17,8 +17,6 @@ export default function CalendarComponent({text}:Props) {
 
     const [date, setDate] = useState<Date | undefined>(new Date())
 
-    console.log(formatDate(date))
-
     return (
         <Popover>
             <PopoverTrigger asChild>

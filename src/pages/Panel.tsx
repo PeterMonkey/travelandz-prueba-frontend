@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle,CardFooter } from "@/components/ui/card"
 import CardTransfer from "@/components/CardTransfer"
 import ComboBox from '@/components/ComboBox'
 import CalendarComponent from "@/components/CalendarComponent"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 import axios from 'axios'
 
@@ -51,7 +53,13 @@ export default function Panel() {
                         <ComboBox text="Terminal..." data={frameworks} empty="Terminal no encontrado"/>
                         <CalendarComponent text="Fecha de salida"/>
                         <CalendarComponent text="Fecha de llegada"/>
+                        <Input type="number" placeholder="Adultos"/>
+                        <Input type="number" placeholder="Niños"/>
+                        <Input type="number" placeholder="Infantes"/>
                     </CardContent>
+                    <CardFooter className="flex justify-center">
+                        <Button>Buscar</Button>
+                    </CardFooter>
                 </Card>
                 <div className="grid grid-cols-1 grid-rows-10 w-3/4">
                     <div className="grid grid-cols-3 grid-rows-2 gap-4 row-span-9 h-[90%]">

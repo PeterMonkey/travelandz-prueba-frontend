@@ -23,10 +23,11 @@ import {
 
   type Props = {
     data: Data[],
-    text: string
+    text: string,
+    empty: string
   }
 
-export default function ComboBox({data, text}: Props) {
+export default function ComboBox({data, text, empty}: Props) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
 
@@ -48,7 +49,7 @@ export default function ComboBox({data, text}: Props) {
           <PopoverContent className="w-[200px] p-0">
             <Command>
               <CommandInput placeholder={text} className="h-9" />
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>{empty}</CommandEmpty>
               <CommandGroup>
                 {data.map((element) => (
                   <CommandItem

@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { formatDate } from "@/lib/utils"
 
 type Props = {
     text: string
@@ -15,6 +16,8 @@ type Props = {
 export default function CalendarComponent({text}:Props) {
 
     const [date, setDate] = useState<Date | undefined>(new Date())
+
+    console.log(formatDate(date))
 
     return (
         <Popover>

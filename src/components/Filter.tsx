@@ -6,28 +6,6 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import axios from 'axios'
 
-const frameworks = [
-    {
-      value: "ES",
-      label: "España",
-    },
-    {
-      value: "AR",
-      label: "Argentina",
-    },
-    {
-        value: "A",
-        label: "Arg"
-      },
-      {
-        value: "ARdfs",
-        label: "Argenna",
-      },
-      {
-        value: "ARvf",
-        label: "Arntina",
-      }
-]
 
 type Country ={
     code: string,
@@ -75,9 +53,9 @@ export default function Filter() {
             <CardTitle>Filtre sus servicios</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-8">
-            <ComboBox text="Pais..." data={frameworks} empty="Pais no encotrado"/>
-            <ComboBox text="Destino..." data={countries} empty="Destino no encontrado"/>
-            <ComboBox text="Terminal..." data={countries} empty="Terminal no encontrado"/>
+            <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" enable={true}/>
+            <ComboBox text="Destino..." data={countries} empty="Destino no encontrado" enable={false}/>
+            <ComboBox text="Terminal..." data={countries} empty="Terminal no encontrado" enable={false}/>
             <CalendarComponent text="Fecha de salida"/>
             <CalendarComponent text="Fecha de llegada"/>
             <Input type="number" placeholder="Adultos"/>

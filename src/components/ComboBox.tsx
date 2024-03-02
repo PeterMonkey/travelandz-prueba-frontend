@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
  
 import { cn } from "@/lib/utils"
@@ -24,12 +24,21 @@ import {
   type Props = {
     data: Data[],
     text: string,
-    empty: string
+    empty: string,
+    enable: boolean
   }
 
-export default function ComboBox({data, text, empty}: Props) {
+export default function ComboBox({data, text, empty, enable}: Props) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
+    const [enabled, setEnabled] = useState("")
+
+    useEffect(() => {
+      if (enable) {
+        setEnabled("opacity-20 pointer-events-none")
+      }
+      setEnabled("")
+    },[enable])
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -38,7 +47,7 @@ export default function ComboBox({data, text, empty}: Props) {
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[200px] justify-between"
+              className={cn("w-[200px] justify-between", enabled)} //opacity-20 pointer-events-none: para deshabilitar
             >
               {value
                 ? data.find((element) => element.value === value)?.label

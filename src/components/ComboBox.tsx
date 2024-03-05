@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
  
 import { cn } from "@/lib/utils"
@@ -25,20 +25,12 @@ import {
     data: Data[],
     text: string,
     empty: string,
-    enable: boolean
+    dispatch?: (p:string) => void
   }
 
-export default function ComboBox({data, text, empty, enable}: Props) {
-    const [open, setOpen] = useState(false)
+export default function ComboBox({data, text, empty, dispatch}: Props) {
+    const [open, setOpen] = useState(true)
     const [value, setValue] = useState("")
-    const [enabled, setEnabled] = useState("")
-
-    useEffect(() => {
-      if (enable) {
-        setEnabled("opacity-20 pointer-events-none")
-      }
-      setEnabled("")
-    },[enable])
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -47,10 +39,10 @@ export default function ComboBox({data, text, empty, enable}: Props) {
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className={cn("w-[200px] justify-between", enabled)} //opacity-20 pointer-events-none: para deshabilitar
+              className={"w-[200px] justify-between"} //opacity-20 pointer-events-none: para deshabilitar
             >
               {value
-                ? data.find((element) => element.value === value)?.label
+                ? data.find((element) => element.value === value.toUpperCase())?.label
                 : text}
               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -67,6 +59,7 @@ export default function ComboBox({data, text, empty, enable}: Props) {
                     onSelect={(currentValue) => {
                       setValue(currentValue === value ? "" : currentValue)
                       setOpen(false)
+                      dispatch ? dispatch(currentValue) : ''
                     }}
                   >
                     {element.label}

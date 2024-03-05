@@ -5,6 +5,9 @@ import CalendarComponent from "./CalendarComponent"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import axios from 'axios'
+import { useAppDispatch } from "@/redux/store"
+import { fetchDestiny } from "@/redux/slice/destinySlice"
+import { useSelector } from "react-redux"
 
 
 type Country ={
@@ -28,7 +31,17 @@ const format = (obj:Obj) => {
 }
 
 
+
 export default function Filter() {
+
+    const destiny = useSelector(state => state.destiny)
+    console.log(destiny)
+
+    const dispatch = useAppDispatch()
+
+    const destinies = (code: string) => {
+        dispatch(fetchDestiny(code))
+    }
 
     const [countries, setCountries] = useState<Data[]>([{value: '', label: ''}])
 
@@ -53,9 +66,9 @@ export default function Filter() {
             <CardTitle>Filtre sus servicios</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-8">
-            <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" enable={true}/>
-            <ComboBox text="Destino..." data={countries} empty="Destino no encontrado" enable={false}/>
-            <ComboBox text="Terminal..." data={countries} empty="Terminal no encontrado" enable={false}/>
+            <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" dispatch={destinies}/>
+            <ComboBox text="Destino..." data={destiny.data} empty="Destino no encontrado"/>
+            <ComboBox text="Terminal..." data={countries} empty="Terminal no encontrado"/>
             <CalendarComponent text="Fecha de salida"/>
             <CalendarComponent text="Fecha de llegada"/>
             <Input type="number" placeholder="Adultos"/>

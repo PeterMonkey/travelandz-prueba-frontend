@@ -7,6 +7,8 @@ import { Button } from "./ui/button"
 import axios from 'axios'
 import { useAppDispatch } from "@/redux/store"
 import { fetchDestiny } from "@/redux/slice/destinySlice"
+import { fetchTerminal } from "@/redux/slice/terminalSlice"
+
 import { useSelector } from "react-redux"
 
 
@@ -37,10 +39,17 @@ export default function Filter() {
     const destiny = useSelector(state => state.destiny)
     console.log(destiny)
 
+    const terminal = useSelector(state => state.terminal)
+    console.log(terminal)
+
     const dispatch = useAppDispatch()
 
     const destinies = (code: string) => {
         dispatch(fetchDestiny(code))
+    }
+
+    const terminals = (code:string) => {
+        dispatch(fetchTerminal(code))
     }
 
     const [countries, setCountries] = useState<Data[]>([{value: '', label: ''}])
@@ -67,8 +76,8 @@ export default function Filter() {
         </CardHeader>
         <CardContent className="flex flex-col gap-8">
             <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" dispatch={destinies}/>
-            <ComboBox text="Destino..." data={destiny.data} empty="Destino no encontrado"/>
-            <ComboBox text="Terminal..." data={countries} empty="Terminal no encontrado"/>
+            <ComboBox text="Destino..." data={destiny.data} empty="Destino no encontrado" dispatch={terminals}/>
+            <ComboBox text="Terminal..." data={terminal.data} empty="Terminal no encontrado"/>
             <CalendarComponent text="Fecha de salida"/>
             <CalendarComponent text="Fecha de llegada"/>
             <Input type="number" placeholder="Adultos"/>

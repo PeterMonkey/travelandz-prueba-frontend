@@ -6,6 +6,7 @@ type State = {
     loading: boolean,
     data: Array<Record<string , string>> | unknown,
     error: string | undefined,
+    status: boolean
 }
 
 type data = {
@@ -32,7 +33,8 @@ export const fetchView = createAsyncThunk('data/fetchView', async (data:data) =>
 const initialState:State = {
     loading: false,
     data: [],
-    error: ''
+    error: '',
+    status: false
 }
 
 export const viewSlice = createSlice({
@@ -43,14 +45,17 @@ export const viewSlice = createSlice({
         builder
         .addCase(fetchView.pending, (state) => {
             state.loading = true
+            state.status = false
         })
         .addCase(fetchView.fulfilled, (state, action) => {
-            state.loading = false,
+            state.loading = false
             state.data = action.payload
+            state.status = true
         })
         .addCase(fetchView.rejected, (state, action) => {
             state.loading = false,
             state.error = action.error.message
+            state.status = false
         })
     }
 })

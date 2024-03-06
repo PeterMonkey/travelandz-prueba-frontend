@@ -16,7 +16,8 @@ type Destiny = {
 type State = {
     loading: boolean,
     data: Data[] | unknown,
-    error: string | undefined
+    error: string | undefined,
+    country: string
 }
 
 const format = (obj: Destiny[]) => {
@@ -33,13 +34,21 @@ export const fetchDestiny = createAsyncThunk('data/fetchDestiny', async (code:st
 const initialState:State = {
     loading: false,
     data: [],
-    error: ''
+    error: '',
+    country: ''
 }
 
 export const destinySlice = createSlice({
     name: 'destiny',
     initialState,
-    reducers: {},
+    reducers: {
+        countryCode: (state, action) => {
+            return {
+                ...state,
+                country: action.payload
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchDestiny.pending, (state) => {
@@ -59,4 +68,5 @@ export const destinySlice = createSlice({
 })
 
 export default destinySlice.reducer
+export const {countryCode} = destinySlice.actions
 

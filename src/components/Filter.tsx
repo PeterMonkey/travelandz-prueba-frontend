@@ -6,8 +6,10 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import axios from 'axios'
 import { useAppDispatch } from "@/redux/store"
-import { fetchDestiny } from "@/redux/slice/destinySlice"
-import { fetchTerminal } from "@/redux/slice/terminalSlice"
+import { fetchDestiny, countryCode } from "@/redux/slice/destinySlice"
+import { fetchTerminal, terminalCode } from "@/redux/slice/terminalSlice"
+import { fetchHotel } from '@/redux/slice/hotelSlice'
+import { fechaLlegada, fechaSalida } from "@/redux/slice/dateSlice"
 
 import { useSelector } from "react-redux"
 
@@ -33,7 +35,6 @@ const format = (obj:Obj) => {
 }
 
 
-
 export default function Filter() {
 
     const destiny = useSelector(state => state.destiny)
@@ -42,15 +43,33 @@ export default function Filter() {
     const terminal = useSelector(state => state.terminal)
     console.log(terminal)
 
+    const hotel = useSelector(state => state.hotel)
+    console.log(hotel)
+
+    const fecha = useSelector(state => state.date)
+    console.log(fecha)
+
+
     const dispatch = useAppDispatch()
 
     const destinies = (code: string) => {
         dispatch(fetchDestiny(code))
+        dispatch(countryCode(code))
     }
 
     const terminals = (code:string) => {
         dispatch(fetchTerminal(code))
+        dispatch(terminalCode(code))
     }
+
+    const llegadaDispatch = (fecha: string | undefined) => {
+        dispatch(fechaLlegada(fecha))
+    }
+
+    const salidaDispatch = (fecha: string | undefined) => {
+        dispatch(fechaSalida(fecha))
+    }
+
 
     const [countries, setCountries] = useState<Data[]>([{value: '', label: ''}])
 
@@ -67,6 +86,12 @@ export default function Filter() {
         getCountries()
     },[])
 
+    useEffect(() => {
+        if(destiny.data.length > 0){
+            dispatch(fetchHotel({countryCode: destiny.country.toUpperCase(), destinyCode: terminal.terminal.toUpperCase()}))
+        }
+    },[destiny, dispatch, terminal])
+
     console.log(countries)
 
     return (
@@ -74,12 +99,13 @@ export default function Filter() {
         <CardHeader>
             <CardTitle>Filtre sus servicios</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-8">
+        <CardContent className="flex flex-col gap-5">
             <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" dispatch={destinies}/>
             <ComboBox text="Destino..." data={destiny.data} empty="Destino no encontrado" dispatch={terminals}/>
-            <ComboBox text="Terminal..." data={terminal.data} empty="Terminal no encontrado"/>
-            <CalendarComponent text="Fecha de salida"/>
-            <CalendarComponent text="Fecha de llegada"/>
+            <ComboBox text="Desde" data={terminal.data == undefined ? [] : terminal.data} empty="Terminal no encontrado"/>
+            <ComboBox text="Hasta..." data={hotel.data} empty="Terminal no encontrado"/>
+            <CalendarComponent text="Fecha de salida" dispatch={salidaDispatch}/>
+            <CalendarComponent text="Fecha de llegada" dispatch={llegadaDispatch}/>
             <Input type="number" placeholder="Adultos"/>
             <Input type="number" placeholder="Niños"/>
             <Input type="number" placeholder="Infantes"/>

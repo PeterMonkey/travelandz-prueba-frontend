@@ -31,6 +31,7 @@ import {
 export default function ComboBox({data, text, empty, dispatch}: Props) {
     const [open, setOpen] = useState(true)
     const [value, setValue] = useState("")
+    //console.log(data)
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -39,7 +40,8 @@ export default function ComboBox({data, text, empty, dispatch}: Props) {
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className={"w-[200px] justify-between"} //opacity-20 pointer-events-none: para deshabilitar
+              className={"w-[200px] justify-between"}
+              disabled={data.length == 0 ? true : false}
             >
               {value
                 ? data.find((element) => element.value === value.toUpperCase())?.label

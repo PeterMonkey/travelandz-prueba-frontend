@@ -9,7 +9,8 @@ type Data = {
 type State = {
     loading: boolean,
     data: Data[] | unknown,
-    error: string | undefined
+    error: string | undefined,
+    terminal: string
 }
 
 type Terminal = {
@@ -40,13 +41,21 @@ export const fetchTerminal = createAsyncThunk('data/fetchTerminal', async (code:
 const initialState:State = {
     loading: false,
     data: [],
-    error: ''
+    error: '',
+    terminal: ''
 }
 
 export const terminalSlice = createSlice({
     name: 'terminal',
     initialState,
-    reducers: {},
+    reducers: {
+        terminalCode: (state, action) => {
+            return {
+                ...state,
+                terminal: action.payload
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchTerminal.pending, (state) => {
@@ -66,3 +75,4 @@ export const terminalSlice = createSlice({
 })
 
 export default terminalSlice.reducer
+export const { terminalCode } = terminalSlice.actions

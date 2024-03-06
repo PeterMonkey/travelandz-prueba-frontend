@@ -10,18 +10,23 @@ import {
 import { formatDate } from "@/lib/utils"
 
 type Props = {
-    text: string
+    text: string,
+    dispatch: (p:string | undefined) => void
 }
 
-export default function CalendarComponent({text}:Props) {
+export default function CalendarComponent({text, dispatch}:Props) {
 
-    const [date, setDate] = useState<Date | undefined>(new Date())
 
+    const [date, setDate] = useState<Date | undefined>()
+    const eventHandler = (date: Date | undefined) => {
+        setDate(date)
+        dispatch(formatDate(date))
+    }
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant='outline'>
-                    {text}
+                    {date?.toDateString() ? (formatDate(date)) : text}
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>     
             </PopoverTrigger>
@@ -29,7 +34,7 @@ export default function CalendarComponent({text}:Props) {
                 <Calendar
                 mode="single"
                 selected={date}
-                onSelect={setDate}
+                onSelect={eventHandler}
                 className="rounded-md border shadow"
                 />
             </PopoverContent>

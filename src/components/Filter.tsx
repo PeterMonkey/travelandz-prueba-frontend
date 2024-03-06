@@ -10,6 +10,7 @@ import { fetchDestiny, countryCode } from "@/redux/slice/destinySlice"
 import { fetchTerminal, terminalCode } from "@/redux/slice/terminalSlice"
 import { fetchHotel, getHotel } from '@/redux/slice/hotelSlice'
 import { fechaLlegada, fechaSalida } from "@/redux/slice/dateSlice"
+import { fetchView } from "@/redux/slice/viewSlice"
 
 import { useSelector } from "react-redux"
 
@@ -43,7 +44,7 @@ export default function Filter() {
     const [infant, setInfant] = useState(0)
 
     const passengersHandler = (seter) => (e:ChangeEvent<HTMLInputElement>) => {
-        seter(e.target.value)
+        seter(parseInt(e.target.value))
     }
 
     const destiny = useSelector(state => state.destiny)
@@ -57,7 +58,6 @@ export default function Filter() {
 
     const fecha = useSelector(state => state.date)
     console.log(fecha)
-
 
     const dispatch = useAppDispatch()
 
@@ -83,6 +83,10 @@ export default function Filter() {
         dispatch(getHotel(code))
     }
 
+    const viewData = (data) => {
+        dispatch(fetchView(data))
+    }
+
     useEffect(() => {
         const getCountries = async () => {
             try {
@@ -104,7 +108,7 @@ export default function Filter() {
 
     const transferData = {
         ftype: 'IATA',
-        fcode: terminal.destiny,
+        fcode: terminal.destiny.toUpperCase(),
         ttype: 'ATLAS',
         tcode: hotel.hotel,
         outbound: fecha.salida,
@@ -113,6 +117,7 @@ export default function Filter() {
         children: children,
         infants: infant
     }
+
 
     console.log(transferData)
 
@@ -133,7 +138,9 @@ export default function Filter() {
             <Input onChange={passengersHandler(setInfant)} type="number" placeholder="Infantes"/>
         </CardContent>
         <CardFooter className="flex justify-center">
-            <Button>Buscar</Button>
+            <Button onClick={() => viewData(transferData)}>
+                Buscar
+            </Button>
         </CardFooter>
     </Card>
     )

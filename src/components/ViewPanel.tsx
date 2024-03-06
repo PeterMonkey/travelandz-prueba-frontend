@@ -1,4 +1,5 @@
 import CardTransfer from "./CardTransfer";
+import PaginationComponent from "./PaginationComponent";
 
 export default function ViewPanel() {
     return (
@@ -7,7 +8,7 @@ export default function ViewPanel() {
             <CardTransfer data={'hola'}/>
         </div>
         <div className="grid items-center justify-center row-start-10">
-            Paginacion
+            <PaginationComponent/>
         </div>
     </div>
     )

@@ -10,7 +10,7 @@ type State = {
     loading: boolean,
     data: Data[] | unknown,
     error: string | undefined,
-    terminal: string
+    destiny: string
 }
 
 type Terminal = {
@@ -42,7 +42,7 @@ const initialState:State = {
     loading: false,
     data: [],
     error: '',
-    terminal: ''
+    destiny: ''
 }
 
 export const terminalSlice = createSlice({
@@ -52,7 +52,7 @@ export const terminalSlice = createSlice({
         terminalCode: (state, action) => {
             return {
                 ...state,
-                terminal: action.payload
+                destiny: action.payload
             }
         }
     },

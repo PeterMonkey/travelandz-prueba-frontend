@@ -9,7 +9,8 @@ type Data = {
 type State = {
     loading: boolean,
     data: Data[] | unknown,
-    error: string | undefined
+    error: string | undefined,
+    hotel: string
 }
 
 type Hotel = {
@@ -31,8 +32,8 @@ type Hotel = {
 const initialState:State = {
     loading: false,
     data: [],
-    error: ''
-    
+    error: '',
+    hotel: ''
 }
 
 const format = (obj:Hotel[]) => {
@@ -49,7 +50,14 @@ export const fetchHotel = createAsyncThunk('data/fetchHotel', async (code:{count
 export const hotelSlice = createSlice({
     name: 'hotel',
     initialState,
-    reducers:{},
+    reducers:{
+        getHotel: (state, action) => {
+            return {
+                ...state,
+                hotel: action.payload
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchHotel.pending, (state) => {
@@ -69,3 +77,4 @@ export const hotelSlice = createSlice({
 })
 
 export default hotelSlice.reducer;
+export const { getHotel } = hotelSlice.actions;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { ChangeEvent, SetStateAction, useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle,CardFooter } from "@/components/ui/card"
 import ComboBox from "./ComboBox"
 import CalendarComponent from "./CalendarComponent"
@@ -8,7 +8,7 @@ import axios from 'axios'
 import { useAppDispatch } from "@/redux/store"
 import { fetchDestiny, countryCode } from "@/redux/slice/destinySlice"
 import { fetchTerminal, terminalCode } from "@/redux/slice/terminalSlice"
-import { fetchHotel } from '@/redux/slice/hotelSlice'
+import { fetchHotel, getHotel } from '@/redux/slice/hotelSlice'
 import { fechaLlegada, fechaSalida } from "@/redux/slice/dateSlice"
 
 import { useSelector } from "react-redux"
@@ -36,6 +36,15 @@ const format = (obj:Obj) => {
 
 
 export default function Filter() {
+
+    const [countries, setCountries] = useState<Data[]>([{value: '', label: ''}])
+    const [adult, setAdult] = useState(0)
+    const [children, setChildrem] = useState(0)
+    const [infant, setInfant] = useState(0)
+
+    const passengersHandler = (seter) => (e:ChangeEvent<HTMLInputElement>) => {
+        seter(e.target.value)
+    }
 
     const destiny = useSelector(state => state.destiny)
     console.log(destiny)
@@ -70,8 +79,9 @@ export default function Filter() {
         dispatch(fechaSalida(fecha))
     }
 
-
-    const [countries, setCountries] = useState<Data[]>([{value: '', label: ''}])
+    const codeHotel = (code: string) => {
+        dispatch(getHotel(code))
+    }
 
     useEffect(() => {
         const getCountries = async () => {
@@ -88,11 +98,23 @@ export default function Filter() {
 
     useEffect(() => {
         if(destiny.data.length > 0){
-            dispatch(fetchHotel({countryCode: destiny.country.toUpperCase(), destinyCode: terminal.terminal.toUpperCase()}))
+            dispatch(fetchHotel({countryCode: destiny.country.toUpperCase(), destinyCode: terminal.destiny.toUpperCase()}))
         }
     },[destiny, dispatch, terminal])
 
-    console.log(countries)
+    const transferData = {
+        ftype: 'IATA',
+        fcode: terminal.destiny,
+        ttype: 'ATLAS',
+        tcode: hotel.hotel,
+        outbound: fecha.salida,
+        inbound: fecha.llegada,
+        adults: adult,
+        children: children,
+        infants: infant
+    }
+
+    console.log(transferData)
 
     return (
         <Card className="w-1/4 h-full mr-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
@@ -102,13 +124,13 @@ export default function Filter() {
         <CardContent className="flex flex-col gap-5">
             <ComboBox text="Pais..." data={countries} empty="Pais no encotrado" dispatch={destinies}/>
             <ComboBox text="Destino..." data={destiny.data} empty="Destino no encontrado" dispatch={terminals}/>
-            <ComboBox text="Desde" data={terminal.data == undefined ? [] : terminal.data} empty="Terminal no encontrado"/>
-            <ComboBox text="Hasta..." data={hotel.data} empty="Terminal no encontrado"/>
+            <ComboBox text="Desde" data={terminal.data == undefined ? [] : terminal.data} empty="Terminal no encontrado" />
+            <ComboBox text="Hasta..." data={hotel.data} empty="Hotel no encontrado" dispatch={codeHotel}/>
             <CalendarComponent text="Fecha de salida" dispatch={salidaDispatch}/>
             <CalendarComponent text="Fecha de llegada" dispatch={llegadaDispatch}/>
-            <Input type="number" placeholder="Adultos"/>
-            <Input type="number" placeholder="Niños"/>
-            <Input type="number" placeholder="Infantes"/>
+            <Input onChange={passengersHandler(setAdult)} type="number" placeholder="Adultos"/>
+            <Input onChange={passengersHandler(setChildrem)} type="number" placeholder="Niños"/>
+            <Input onChange={passengersHandler(setInfant)} type="number" placeholder="Infantes"/>
         </CardContent>
         <CardFooter className="flex justify-center">
             <Button>Buscar</Button>

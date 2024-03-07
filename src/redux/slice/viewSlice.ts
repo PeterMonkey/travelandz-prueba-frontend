@@ -24,7 +24,7 @@ type data = {
 export const fetchView = createAsyncThunk('data/fetchView', async (data:data) => {
     const response = await axios.get(`http://localhost:3000/transfer/?ftype=IATA&fcode=${data.fcode}&ttype=ATLAS&tcode=${data.tcode}&outbound=${data.outbound}&inbound=${data.inbound}&adults=${data.adults}&children=${data.children}&infants=${data.infants}`, {
         headers: {
-            'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImViZGM1MGRiLWJhZTItNDY1Yi05ZjBjLWVkYjVhNTkxY2ZmMyIsIm5hbWUiOiJQZWRybyIsImVtYWlsIjoicGVkcm9AZ21haWwuY29tIiwiaWF0IjoxNzA5MjI4NjM2LCJleHAiOjE3MTE3MzQyMzZ9.7MhKzlujbOp6yLEFZHbu1EOpqjRBSH64au-KCQ9Xkeg'
+            'auth-token': localStorage.getItem('token')
         }
     })
     return response.data

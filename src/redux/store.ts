@@ -5,6 +5,7 @@ import terminalSlice from "./slice/terminalSlice";
 import hotelSlice from "./slice/hotelSlice";
 import { dateSlice } from "./slice/dateSlice";
 import viewSlice from "./slice/viewSlice";
+import reserveSlice from "./slice/reserveSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
         terminal: terminalSlice,
         hotel: hotelSlice,
         date: dateSlice.reducer,
-        view: viewSlice
+        view: viewSlice,
+        reserve: reserveSlice
     }
 })
 
